@@ -1,28 +1,77 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+
+<div>
+   <h1 class="titulo">Personajes de Ricky and Morty</h1>
+   <div class="contenedor">
+      <Avatar
+      v-for="(personaje, index) in personajes" 
+      :key="index"
+      :name="personaje.name"
+      :image="personaje.image"
+      />
+    </div>
+</div>
+  
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import axios from 'axios';
+import Avatar from '@/components/Avatar.vue'
+
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  components: { Avatar },
+  data() {
+    return {
+      personajes: [],
+      
+    };
+  },
+  mounted(){
+    this.getTodos();
+  },
+  methods:{
+    getTodos() {
+    axios
+    .get("https://rickandmortyapi.com/api/character/")
+    .then(res=>{
+      (this.personajes = res.data.results)
+    })
+    .catch(e=>{
+    console.log(e)
+  })
   }
-}
+  
+  
+  }
+  
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+body{
+  background-image: url("../public/assets/img.png");
+  background-size: cover;
 }
+.contenedor{
+      display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex-wrap: wrap;
+}
+.card{
+  display: flex;
+    flex-direction: row;
+    padding: 10px;
+    margin: 10px;
+    width: 25%;
+    justify-content: center;
+    align-content: center;
+}
+.titulo{
+  text-align: center;
+  color: white;
+  font-size: 32px;
+}
+
 </style>
